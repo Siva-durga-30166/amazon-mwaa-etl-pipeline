@@ -1,0 +1,9 @@
+sale_id,customer_id,product,quantity,price
+S001,C001,Laptop,1,55000
+S002,C002,Mouse,2,800
+S003,C003,Keyboard,1,1500
+S004,C001,Monitor,1,12000
+S005,C004,Headphones,2,2000
+S006,C002,Mouse,1,800
+S007,C005,Laptop,1,60000
+S008,C003,Keyboard,2,1500
