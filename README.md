@@ -1,334 +1,205 @@
-\# Amazon Managed Workflows for Apache Airflow Pipeline
+# Amazon Managed Workflows for Apache Airflow Pipeline
 
-
-
-\## Project Code
-
+## Project Code
 24CC3014-P104
 
-
-
-\## Domain
-
+## Domain
 Data Engineering
 
+## Project Title
+Amazon Managed Workflows for Apache Airflow Pipeline
 
+## 1. Project Overview
 
-\---
+This project is based on Data Engineering and focuses on building an ETL pipeline using Apache Airflow.
 
+The project takes data from multiple CSV files, processes and transforms the data, and generates a final processed output file.
 
+Apache Airflow is used to manage and execute the different stages of the ETL pipeline in the correct order.
 
-\# Project Overview
+The pipeline has been implemented and tested locally using Docker and Apache Airflow. The next step is to deploy the pipeline using Amazon MWAA.
 
+## 2. Problem Statement
 
+Data in real-world applications can come from different sources and may require multiple processing steps before it can be used.
 
-This project focuses on designing and implementing a Multi-Source ETL pipeline using Apache Airflow.
+Performing these steps manually can be difficult and time-consuming.
 
+This project aims to solve this problem by creating an automated ETL pipeline and using Apache Airflow to manage the workflow and dependencies between the tasks.
 
+## 3. Objectives
 
-The pipeline extracts data from multiple sources, transforms and processes the data, and loads the processed data into an output layer.
+The main objectives of this project are:
 
+- To create a multi-source ETL pipeline.
+- To extract data from multiple CSV files.
+- To combine and transform the data.
+- To clean the data.
+- To generate processed output data.
+- To use Apache Airflow for workflow orchestration.
+- To run and monitor the ETL pipeline.
+- To prepare the pipeline for deployment on Amazon MWAA.
 
+## 4. Data Sources
 
-The workflow is designed as an Apache Airflow DAG and can later be deployed using Amazon Managed Workflows for Apache Airflow (Amazon MWAA).
+The project currently uses two CSV files.
 
+### Sales Data
 
+File:
 
-\---
+`data/sales.csv`
 
+It contains the following fields:
 
+- sale_id
+- customer_id
+- product
+- quantity
+- price
 
-\# Problem Statement
+### Customer Data
 
+File:
 
+`data/customers.csv`
 
-Data Engineering pipelines often involve multiple data sources and dependent processing tasks.
+It contains the following fields:
 
+- customer_id
+- customer_name
+- city
 
+## 5. ETL Process
 
-Managing these tasks manually can be difficult because:
+The ETL process consists of three main stages.
 
+### Extract
 
+The sales and customer data are read from the CSV files using Python and Pandas.
 
-\- Tasks have dependencies.
+### Transform
 
-\- Data must be processed in the correct order.
+The two datasets are combined using `customer_id`.
 
-\- Pipeline failures must be monitored.
+The following transformations are performed:
 
-\- Workflows need scheduling and automation.
+- Calculate the total amount using quantity and price.
+- Remove missing values.
+- Convert customer names to uppercase.
 
-\- Managing DAG dependencies across teams can become complex.
+The formula used is:
 
+`total_amount = quantity * price`
 
+### Load
 
-Apache Airflow provides workflow orchestration to manage these ETL processes.
+The transformed data is saved as a CSV file.
 
+The final output is:
 
+`output/processed_sales.csv`
 
-\---
+An intermediate transformed file is also created:
 
+`output/transformed_sales.csv`
 
+## 6. Python ETL
 
-\# Objective
+The Python ETL implementation is available in:
 
+`src/etl.py`
 
+The program performs the complete Extract, Transform and Load process.
 
-The objective of this project is to:
+The Python ETL pipeline was successfully executed and the processed output was generated.
 
+## 7. Apache Airflow
 
+Apache Airflow is used to orchestrate the ETL pipeline.
 
-\- Build a multi-source ETL pipeline.
+The DAG file is:
 
-\- Extract data from multiple sources.
+`dags/etl_pipeline.py`
 
-\- Transform and clean the extracted data.
+The DAG name is:
 
-\- Load processed data into an output layer.
+`multi_source_etl_pipeline`
 
-\- Define the workflow using an Apache Airflow DAG.
+The DAG contains three tasks:
 
-\- Prepare the pipeline for future deployment using Amazon MWAA.
+- extract_data
+- transform_data
+- load_data
 
+The tasks are executed in the following order:
 
+`extract_data -> transform_data -> load_data`
 
-\---
+This ensures that each task is completed before the next task starts.
 
+## 8. Docker Setup
 
+Apache Airflow was configured using Docker.
 
-\# ETL Workflow
+The Docker configuration is available in:
 
+`docker-compose.yaml`
 
+Docker was used to create a local environment for running Apache Airflow on Windows.
 
-Extract → Transform → Load
+The Airflow web interface was accessed using:
 
+`http://localhost:8080`
 
+## 9. Airflow Execution
 
-\## 1. Extract
+The Airflow DAG was successfully triggered from the Airflow web interface.
 
+All three tasks were executed successfully.
 
+Execution result:
 
-The pipeline reads data from:
+- extract_data - SUCCESS
+- transform_data - SUCCESS
+- load_data - SUCCESS
+- DAG Run - SUCCESS
 
+This confirms that the ETL workflow is working successfully with Apache Airflow in the local Docker environment.
 
+## 10. Technologies Used
 
-\- sales.csv
+- Python
+- Pandas
+- Apache Airflow
+- Docker
+- Docker Compose
+- Git
+- GitHub
+- CSV
 
-\- customers.csv
+AWS services such as Amazon S3 and Amazon MWAA will be used in the next phase of the project.
 
-
-
-\## 2. Transform
-
-
-
-The pipeline performs the following operations:
-
-
-
-\- Merges sales and customer data.
-
-\- Removes missing values.
-
-\- Converts customer names to uppercase.
-
-\- Calculates the total transaction amount.
-
-
-
-Formula:
-
-
-
-total\_amount = quantity × price
-
-
-
-\## 3. Load
-
-
-
-The processed data is saved as:
-
-
-
-output/processed\_sales.csv
-
-
-
-\---
-
-
-
-\# Airflow DAG Workflow
-
-
-
-The workflow is represented using an Apache Airflow DAG.
-
-
-
-Extract Data
-
-&#x20;    ↓
-
-Transform Data
-
-&#x20;    ↓
-
-Load Data
-
-
-
-The tasks are executed sequentially based on their dependencies.
-
-
-
-\---
-
-
-
-\# Project Architecture
-
-
-
-Data Sources
-
-&#x20;    │
-
-&#x20;    ▼
-
-sales.csv + customers.csv
-
-&#x20;    │
-
-&#x20;    ▼
-
-Apache Airflow DAG
-
-&#x20;    │
-
-&#x20;    ▼
-
-Extract
-
-&#x20;    │
-
-&#x20;    ▼
-
-Transform
-
-&#x20;    │
-
-&#x20;    ▼
-
-Load
-
-&#x20;    │
-
-&#x20;    ▼
-
-Processed Output
-
-
-
-\---
-
-
-
-\# Technologies Used
-
-
-
-\- Python
-
-\- Pandas
-
-\- Apache Airflow
-
-\- ETL
-
-\- CSV
-
-\- Amazon MWAA (Planned)
-
-
-
-\---
-
-
-
-\# Current Implementation Status
-
-
-
-| Component | Status |
-
-|-----------|--------|
-
-| Project Setup | Completed |
-
-| Multi-Source Data | Completed |
-
-| Extract Process | Completed |
-
-| Transform Process | Completed |
-
-| Load Process | Completed |
-
-| Python ETL Pipeline | Working |
-
-| Airflow DAG | Created |
-
-| Local Airflow Execution | Pending |
-
-| Amazon MWAA Deployment | Pending |
-
-
-
-\---
-
-
-
-\# Project Structure
-
-
+## 11. Project Structure
 
 ```text
-
 airflow-etl-project/
-
 │
-
 ├── data/
-
 │   ├── sales.csv
-
 │   └── customers.csv
-
 │
-
-├── dags/
-
-│   └── etl\_pipeline.py
-
-│
-
 ├── output/
-
-│   └── processed\_sales.csv
-
+│   ├── processed_sales.csv
+│   └── transformed_sales.csv
 │
-
+├── dags/
+│   └── etl_pipeline.py
+│
 ├── src/
-
 │   └── etl.py
-
 │
-
+├── docker-compose.yaml
 ├── README.md
-
-│
-
+├── .gitignore
 └── venv/
-
